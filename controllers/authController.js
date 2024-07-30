@@ -26,9 +26,7 @@ const signupController = async (req, res) => {
             password: hashedPassword,
         });
 
-        return res.send(
-            success(201, 'user created successfully')
-        );
+        return res.send(success(201, "user created successfully"));
     } catch (e) {
         return res.send(error(500, e.message));
     }
@@ -43,7 +41,7 @@ const loginController = async (req, res) => {
             return res.send(error(400, "All fields are required"));
         }
 
-        const user = await User.findOne({ email }).select('+password');
+        const user = await User.findOne({ email }).select("+password");
         if (!user) {
             // return res.status(404).send("User is not registered");
             return res.send(error(404, "User is not registered"));
@@ -52,7 +50,7 @@ const loginController = async (req, res) => {
         const matched = await bcrypt.compare(password, user.password);
         if (!matched) {
             // return res.status(403).send("Incorrect password");
-            return res.send(error(403, "ncorrect password"));
+            return res.send(error(403, "Incorrect password"));
         }
 
         const accessToken = generateAccessToken({
@@ -83,7 +81,7 @@ const refreshAccessTokenController = async (req, res) => {
 
     const refreshToken = cookies.jwt;
 
-    console.log('refressh', refreshToken);
+    console.log("refressh", refreshToken);
 
     try {
         const decoded = jwt.verify(
@@ -104,15 +102,15 @@ const refreshAccessTokenController = async (req, res) => {
 
 const logoutController = async (req, res) => {
     try {
-        res.clearCookie('jwt', {
+        res.clearCookie("jwt", {
             httpOnly: true,
             secure: true,
-        })
-        return res.send(success(200, 'user logged out'))
+        });
+        return res.send(success(200, "user logged out"));
     } catch (e) {
         return res.send(error(500, e.message));
     }
-}
+};
 
 //internal functions
 const generateAccessToken = (data) => {
@@ -143,5 +141,5 @@ module.exports = {
     signupController,
     loginController,
     refreshAccessTokenController,
-    logoutController
+    logoutController,
 };
